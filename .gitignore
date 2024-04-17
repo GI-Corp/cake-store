@@ -35,3 +35,5 @@ msbuild.wrn
 
 # Custom
 .idea/
+.git/
+.github/
