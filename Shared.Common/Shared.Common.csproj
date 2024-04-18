@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net7.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />
+      <PackageReference Include="Microsoft.OpenApi" Version="1.6.14" />
+      <PackageReference Include="Swashbuckle.AspNetCore.ReDoc" Version="6.5.0" />
+      <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="6.5.0" />
+      <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.5.0" />
+      <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="6.5.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Shared.Domain\Shared.Domain.csproj" />
+      <ProjectReference Include="..\Shared.Presentation\Shared.Presentation.csproj" />
+    </ItemGroup>
+
+</Project>
