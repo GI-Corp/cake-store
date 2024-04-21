@@ -1,6 +1,6 @@
-using CakeStoreApp.Mappers.Reference.ViewModels;
+using Shared.Presentation.ViewModels.Reference;
 
-namespace Shared.Presentation.ViewModels.Reference;
+namespace CakeStoreApp.Mappers.Reference;
 
 public interface IReferenceContainer
 {
