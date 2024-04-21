@@ -7,9 +7,16 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Folder Include="DAL\DbContexts\" />
       <Folder Include="DAL\Repositores\" />
       <Folder Include="EntityConfigurations\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.10" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\CakeStore.Domain\CakeStore.Domain.csproj" />
     </ItemGroup>
 
 </Project>

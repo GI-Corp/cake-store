@@ -8,14 +8,40 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="9.0.0" />
+        <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.0" />
+        <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="7.0.18" />
+        <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="5.1.0" />
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.9" />
+        <PackageReference Include="Microsoft.IdentityModel.Logging" Version="7.0.0" />
+        <PackageReference Include="Microsoft.IdentityModel.Protocols" Version="7.0.0" />
+        <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="7.0.0" />
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.0.11" />
+        <PackageReference Include="OpenTelemetry" Version="1.7.0" />
+        <PackageReference Include="OpenTelemetry.Exporter.Console" Version="1.7.0" />
+        <PackageReference Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" Version="1.7.0" />
+        <PackageReference Include="OpenTelemetry.Extensions.Hosting" Version="1.7.0" />
+        <PackageReference Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.7.0" />
+        <PackageReference Include="OpenTelemetry.Instrumentation.Http" Version="1.7.0" />
+        <PackageReference Include="Serilog.AspNetCore" Version="8.0.1" />
+        <PackageReference Include="Serilog.Sinks.Async" Version="1.5.0" />
+        <PackageReference Include="Serilog.Sinks.Elasticsearch" Version="10.0.0" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+        <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="7.0.0" />
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Extensions\" />
-      <Folder Include="Mappers\" />
-      <Folder Include="Middlewares\" />
+      <Folder Include="Controllers\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\CakeStore.Application\CakeStore.Application.csproj" />
+      <ProjectReference Include="..\CakeStore.Domain\CakeStore.Domain.csproj" />
+      <ProjectReference Include="..\CakeStore.Infrastructure\CakeStore.Infrastructure.csproj" />
+      <ProjectReference Include="..\Shared.Common\Shared.Common.csproj" />
+      <ProjectReference Include="..\Shared.Data\Shared.Data.csproj" />
     </ItemGroup>
 
 </Project>

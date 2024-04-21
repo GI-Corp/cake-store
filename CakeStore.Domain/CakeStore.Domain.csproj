@@ -8,9 +8,11 @@
 
     <ItemGroup>
       <Folder Include="Constants\" />
-      <Folder Include="Entities\CakeStore\" />
-      <Folder Include="Entities\Reference\" />
       <Folder Include="Options\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Shared.Domain\Shared.Domain.csproj" />
     </ItemGroup>
 
 </Project>

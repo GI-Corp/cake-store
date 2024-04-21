@@ -15,8 +15,11 @@
       <Folder Include="Helpers\" />
       <Folder Include="IntegrationEvents\EventHandlers\" />
       <Folder Include="IntegrationEvents\Events\" />
-      <Folder Include="Interfaces\" />
-      <Folder Include="Services\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\CakeStore.Infrastructure\CakeStore.Infrastructure.csproj" />
+      <ProjectReference Include="..\Shared.Presentation\Shared.Presentation.csproj" />
     </ItemGroup>
 
 </Project>
