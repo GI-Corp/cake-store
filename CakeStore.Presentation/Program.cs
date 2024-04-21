@@ -1,25 +1,47 @@
-var builder = WebApplication.CreateBuilder(args);
+using Autofac.Extensions.DependencyInjection;
+using CakeStoreApp;
+using Serilog;
 
-// Add services to the container.
-
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-
-var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+try
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    var programEnvironment = $"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")}.json";
+    
+    var configuration = new ConfigurationBuilder()
+        .SetBasePath(Directory.GetCurrentDirectory())
+        .AddEnvironmentVariables()
+        .AddJsonFile(programEnvironment, optional: true, reloadOnChange: true)
+        .Build();
+    
+    Serilog.Debugging.SelfLog.Enable(Console.Out);
+
+    var loggerConfiguration = new LoggerConfiguration()
+        .ReadFrom.Configuration(configuration);
+
+    Log.Logger = loggerConfiguration.CreateLogger();
+    
+    AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", isEnabled: true);
+
+    var host = Host
+        .CreateDefaultBuilder(args)
+        .UseServiceProviderFactory(new AutofacServiceProviderFactory())
+        .ConfigureWebHostDefaults(webBuilder =>
+        {
+            webBuilder.UseKestrel(options =>
+                {
+                    options.Configure(configuration.GetSection("Kestrel"));
+                    options.UseSystemd();
+                })
+                .UseStartup<Startup>();
+        })
+        .UseSerilog()
+        .Build();
+    
+    host.Run();
+    return 0;
 }
-
-app.UseHttpsRedirection();
-
-app.UseAuthorization();
-
-app.MapControllers();
-
-app.Run();
+catch (Exception exception)
+{
+    Log.Fatal(exception, "Program terminated unexpectedly.");
+    Log.CloseAndFlush();
+    return 1;
+}
