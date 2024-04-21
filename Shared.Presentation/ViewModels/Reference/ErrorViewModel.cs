@@ -1,4 +1,4 @@
-namespace CakeStoreApp.Mappers.Reference.ViewModels;
+namespace Shared.Presentation.ViewModels.Reference;
 
 public class ErrorViewModel
 {
