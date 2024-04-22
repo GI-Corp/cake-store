@@ -1,0 +1,91 @@
+version: "3.3"
+
+services:
+  cakestore:
+    container_name: cakestore
+    image: cakestore/services.core:1.0
+    ports:
+      - "8010:8010"
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile.cakestore
+    environment:
+      - ASPNETCORE_ENVIRONMENT=${ENVIRONMENT}
+      - TZ=${TIMEZONE}
+    restart: on-failure
+    depends_on:
+      - database
+      - rabbitmq
+      - redis
+      - jaeger
+      - pgbouncer-db
+  
+  database:
+    container_name: database
+    image: postgres:latest
+    environment:
+      - TZ=${TIMEZONE}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+    volumes:
+      - core_volume:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    restart: on-failure
+  
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    env_file:
+      - .env
+    hostname: 'rabbitmq'
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    restart: on-failure
+  
+  redis:
+    image: bitnami/redis:5.0.9
+    hostname: redis
+    env_file:
+      - .env
+    ports:
+      - "6379:6379"
+    restart: on-failure
+  
+  jaeger:
+    image: jaegertracing/all-in-one:latest
+    ports:
+      - "5775:5775"
+      - "6831:6831"
+      - "6832:6832"
+      - "5778:5778"
+      - "16686:16686"
+      - "14268:14268"
+      - "14250:14250"
+      - "4317:4317"
+    environment:
+      - COLLECTOR_OTLP_ENABLED=${COLLECTOR_ENABLED}
+      - LOG_LEVEL=${JAEGER_LOG_LEVEL}
+  
+  pgbouncer-db:
+    image: edoburu/pgbouncer
+    container_name: pgbouncer-db
+    environment:
+      - DB_USER=${POSTGRES_USER}
+      - DB_PASSWORD=${POSTGRES_PASSWORD}
+      - DB_HOST=${POSTGRES_HOST}
+      - DB_PORT=${POSTGRES_PORT}
+      - DB_NAME=${POSTGRES_DB}
+      - MAX_CLIENT_CONN=${PG_BOUNCER_MAX_CLIENT_CONN}
+      - MAX_DB_CONN=${PG_BOUNCER_MAX_DB_CONN}
+      - AUTH_TYPE=${PG_BOUNCER_AUTH_TYPE}
+    ports:
+      - "6500:5432"
+    depends_on:
+      - database
+
+volumes:
+  core_volume:
+    driver: local
