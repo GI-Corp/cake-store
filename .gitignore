@@ -37,3 +37,4 @@ msbuild.wrn
 .idea/
 .git/
 .github/
+.env
