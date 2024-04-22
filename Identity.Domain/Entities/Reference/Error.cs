@@ -1,6 +1,4 @@
-using CakeStore.Domain.Entities.Reference;
-
-namespace CakeStore.Domain.Entities.CakeStore;
+﻿namespace Identity.Domain.Entities.Reference;
 
 public class Error : IEquatable<Error>
 {
