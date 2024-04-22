@@ -1,14 +1,11 @@
-﻿namespace Shared.Domain.Entities.Abstraction;
+﻿using System;
+namespace Shared.Domain.Entities.Abstraction;
 
-public abstract class BaseEntity : BaseEntity<Guid>
+public interface IBaseEntity<TId>
 {
-    protected BaseEntity()
-    {
-        Id = Guid.NewGuid();
-    }
-}
-
-public abstract class BaseEntity<TId> : IEntity<TId>
-{
-    public TId Id { get; set; } = default!;
+    TId Id { get; set; }
+    bool IsActive { get; set; }
+    DateTime CreatedAt { get; set; }
+    DateTime UpdatedAt { get; set; }
+    DateTime? DeletedAt { get; set; }
 }
