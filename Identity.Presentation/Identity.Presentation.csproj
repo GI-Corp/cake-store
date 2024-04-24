@@ -6,4 +6,15 @@
         <ImplicitUsings>enable</ImplicitUsings>
     </PropertyGroup>
 
+    <ItemGroup>
+      <Folder Include="Controllers\" />
+      <Folder Include="Helpers\" />
+      <Folder Include="References\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Identity.Application\Identity.Application.csproj" />
+      <ProjectReference Include="..\Shared.Common\Shared.Common.csproj" />
+    </ItemGroup>
+
 </Project>

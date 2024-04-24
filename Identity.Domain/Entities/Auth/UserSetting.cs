@@ -1,4 +1,4 @@
-﻿using CakeStore.Domain.Entities.Reference;
+﻿using Identity.Domain.Entities.Reference;
 using Shared.Domain.Entities.Abstraction;
 
 namespace Identity.Domain.Entities.Auth;

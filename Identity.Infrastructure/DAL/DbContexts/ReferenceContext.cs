@@ -1,5 +1,5 @@
-﻿using CakeStore.Domain.Entities.Reference;
-using Identity.Domain.Constants;
+﻿using Identity.Domain.Constants;
+using Identity.Domain.Entities.Reference;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
 

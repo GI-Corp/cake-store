@@ -1,4 +1,6 @@
-﻿namespace Identity.Domain.Entities.Reference;
+﻿using Identity.Domain.Entities.Reference;
+
+namespace Identity.Domain.Entities.Auth;
 
 public class Error : IEquatable<Error>
 {

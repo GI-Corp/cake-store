@@ -1,4 +1,4 @@
-﻿using CakeStore.Domain.Entities.CakeStore;
+﻿using Identity.Domain.Entities.Auth;
 using Identity.Infrastructure.DAL.DbContexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;

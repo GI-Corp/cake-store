@@ -12,12 +12,11 @@
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="7.0.0" />
+      <ProjectReference Include="..\Shared.Domain\Shared.Domain.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\CakeStore.Domain\CakeStore.Domain.csproj" />
-      <ProjectReference Include="..\Shared.Domain\Shared.Domain.csproj" />
+      <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="7.0.0" />
     </ItemGroup>
 
 </Project>

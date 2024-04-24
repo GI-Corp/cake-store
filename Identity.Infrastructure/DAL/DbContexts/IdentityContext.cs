@@ -1,5 +1,4 @@
-﻿using CakeStore.Domain.Entities.CakeStore;
-using Identity.Domain.Constants;
+﻿using Identity.Domain.Constants;
 using Identity.Domain.Entities.Auth;
 using Identity.Domain.Entities.Session;
 using Identity.Domain.Entities.Token;
@@ -24,9 +23,9 @@ public class IdentityContext : IdentityDbContext<AppUser, AppRole, Guid>
     public DbSet<UserSession> UserSessions { get; set; }
     public DbSet<UserProfile> UserProfiles { get; set; }
     public DbSet<UserSetting> UserSettings { get; set; }
-    public DbSet<Error> Errors { get; set; }
     public DbSet<RefreshToken> RefreshTokens { get; set; }
     public DbSet<IdentityUserRole<Guid>> IdentityUserRoles { get; set; }
+    public DbSet<Error> Errors { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

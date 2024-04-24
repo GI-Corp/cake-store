@@ -4,4 +4,5 @@ namespace Identity.Domain.Entities.Reference;
 
 public class Language : ProtectedReferenceEntityBase<string>
 {
+
 }
