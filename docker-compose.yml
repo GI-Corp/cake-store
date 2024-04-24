@@ -5,10 +5,30 @@ services:
     container_name: cakestore
     image: cakestore/services.core:1.0
     ports:
-      - "8010:8010"
+      - "8030:8030"
     build:
       context: .
       dockerfile: ./docker/Dockerfile.cakestore
+    environment:
+      - ASPNETCORE_ENVIRONMENT=${ENVIRONMENT}
+      - TZ=${TIMEZONE}
+    restart: on-failure
+    depends_on:
+      - database
+      - rabbitmq
+      - redis
+      - jaeger
+      - pgbouncer-db
+      - identity
+
+  identity:
+    container_name: identity
+    image: cakestore/services.identity:1.0
+    ports:
+      - "8010:8010"
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile.identity
     environment:
       - ASPNETCORE_ENVIRONMENT=${ENVIRONMENT}
       - TZ=${TIMEZONE}
