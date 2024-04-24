@@ -1,6 +1,6 @@
-using CakeStore.Domain.Entities.Reference;
+﻿using Identity.Domain.Entities.Reference;
 
-namespace CakeStore.Domain.Entities.CakeStore;
+namespace Identity.Domain.Entities.Auth;
 
 public class Error : IEquatable<Error>
 {

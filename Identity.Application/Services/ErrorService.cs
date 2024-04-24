@@ -1,14 +1,14 @@
-using CakeStore.Application.Interfaces;
-using CakeStore.Infrastructure.DAL.DbContexts;
+﻿using Identity.Application.Interfaces;
+using Identity.Infrastructure.DAL.DbContexts;
 using Shared.Presentation.ViewModels.Reference;
 
-namespace CakeStore.Application.Services;
+namespace Identity.Application.Services;
 
 public class ErrorService : IErrorService
 {
-    private readonly CakeStoreContext _context;
+    private readonly IdentityContext _context;
 
-    public ErrorService(CakeStoreContext context)
+    public ErrorService(IdentityContext context)
     {
         _context = context ?? throw new ArgumentNullException(nameof(context));
     }
