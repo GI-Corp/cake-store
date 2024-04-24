@@ -20,6 +20,7 @@ public class IdentityContext : IdentityDbContext<AppUser, AppRole, Guid>
     }
 
     public DbSet<AppUser> AppUsers { get; set; }
+    public DbSet<AppRole> AppRoles { get; set; }
     public DbSet<UserSession> UserSessions { get; set; }
     public DbSet<UserProfile> UserProfiles { get; set; }
     public DbSet<UserSetting> UserSettings { get; set; }
