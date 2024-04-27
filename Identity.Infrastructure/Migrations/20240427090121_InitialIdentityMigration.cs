@@ -15,6 +15,9 @@ namespace Identity.Infrastructure.Migrations
             migrationBuilder.EnsureSchema(
                 name: "Identity");
 
+            migrationBuilder.EnsureSchema(
+                name: "References");
+
             migrationBuilder.CreateTable(
                 name: "AppRoles",
                 schema: "Identity",
@@ -56,20 +59,6 @@ namespace Identity.Infrastructure.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AppUsers", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Language",
-                schema: "Identity",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "text", nullable: false),
-                    Name = table.Column<string>(type: "text", nullable: false),
-                    DisplayName = table.Column<string>(type: "text", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Language", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -259,8 +248,8 @@ namespace Identity.Infrastructure.Migrations
                     table.ForeignKey(
                         name: "FK_Errors_Language_LanguageId",
                         column: x => x.LanguageId,
-                        principalSchema: "Identity",
-                        principalTable: "Language",
+                        principalSchema: "References",
+                        principalTable: "Languages",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -289,10 +278,10 @@ namespace Identity.Infrastructure.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_UserSettings_Language_LanguageId",
+                        name: "FK_UserSettings_Languages_LanguageId",
                         column: x => x.LanguageId,
-                        principalSchema: "Identity",
-                        principalTable: "Language",
+                        principalSchema: "References",
+                        principalTable: "Languages",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -500,10 +489,6 @@ namespace Identity.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "UserSessions",
-                schema: "Identity");
-
-            migrationBuilder.DropTable(
-                name: "Language",
                 schema: "Identity");
 
             migrationBuilder.DropTable(
