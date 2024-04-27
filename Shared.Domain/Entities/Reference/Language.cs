@@ -1,6 +1,7 @@
-﻿namespace Shared.Domain.Entities.Reference;
+﻿using Shared.Domain.Entities.Abstraction;
 
-public class Language
+namespace Shared.Domain.Entities.Reference;
+
+public class Language : ReferenceEntityBase<string>
 {
-    
 }
