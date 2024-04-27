@@ -3,7 +3,7 @@ using Shared.Domain.Entities.Abstraction;
 
 namespace Identity.Domain.Entities.Session;
 
-public class UserSession : IBaseEntity<Guid>
+public class UserSession : IBaseEntity<Guid>, IEntity<Guid>
 {
     public Guid Id { get; set; }
     public Guid UserId { get; set; }

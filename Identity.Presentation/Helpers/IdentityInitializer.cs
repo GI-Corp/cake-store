@@ -1,13 +1,13 @@
-using CakeStore.Domain.Entities.CakeStore;
-using CakeStore.Infrastructure.DAL.DbContexts;
+﻿using Identity.Domain.Entities.Auth;
+using Identity.Infrastructure.DAL.DbContexts;
 
-namespace CakeStoreApp.Helpers;
+namespace Identity.Presentation.Helpers;
 
-public class CakeStoreInitializer
+public class IdentityInitializer
 {
-    private readonly CakeStoreContext _context;
+    private readonly IdentityContext _context;
 
-    public CakeStoreInitializer(CakeStoreContext context)
+    public IdentityInitializer(IdentityContext context)
     {
         _context = context ?? throw new ArgumentNullException(nameof(context));
     }
