@@ -38,4 +38,11 @@ public static class Constants
         public const string SellerPolicy = "SellerPolicy";
         public const int DefaultPageSize = 10;
     }
+    
+    public static class Languages
+    {
+        public const string uz = "uz";
+        public const string ru = "ru";
+        public const string en = "en";
+    }
 }
