@@ -2,6 +2,7 @@
 using Identity.Domain.Entities.Auth;
 using Identity.Domain.Entities.Session;
 using Identity.Domain.Entities.Token;
+using Identity.Infrastructure.EntityConfigurations;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -31,5 +32,16 @@ public class IdentityContext : IdentityDbContext<AppUser, AppRole, Guid>
     {
         base.OnModelCreating(builder);
         builder.HasDefaultSchema(IdentityScheme);
+        builder.ApplyConfiguration(new AppUserEntityTypeConfiguration());
+        builder.ApplyConfiguration(new AppRoleEntityTypeConfiguration());
+        builder.ApplyConfiguration(new UserSettingEntityTypeConfiguration());
+        builder.ApplyConfiguration(new UserProfileEntityTypeConfiguration());
+        builder.ApplyConfiguration(new UserSettingEntityTypeConfiguration());
+        builder.ApplyConfiguration(new ErrorEntityTypeConfiguration());
+        builder.ApplyConfiguration(new IdentityRoleClaimEntityTypeConfiguration());
+        builder.ApplyConfiguration(new IdentityUserClaimEntityTypeConfiguration());
+        builder.ApplyConfiguration(new IdentityUserLoginEntityTypeConfiguration());
+        builder.ApplyConfiguration(new IdentityUserRoleEntityTypeConfiguration());
+        builder.ApplyConfiguration(new IdentityUserTokenEntityTypeConfiguration());
     }
 }
