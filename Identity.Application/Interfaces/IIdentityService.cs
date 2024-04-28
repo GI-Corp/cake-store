@@ -8,4 +8,5 @@ public interface IIdentityService
     Task<AppUserDto> CreateOrUpdateUserAsync(RegisterDto registerDto);
     Task<bool> ValidateRegistrationModelAsync(RegisterDto registerDto);
     Task<AppUserDto> GetUserDetailsByIdAsync(Guid userId);
+    Task<TokenDto> AuthorizeUserAsync(LoginDto loginDto, string? hostAddress);
 }

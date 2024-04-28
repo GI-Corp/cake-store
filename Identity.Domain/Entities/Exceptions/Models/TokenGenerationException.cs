@@ -2,19 +2,19 @@
 
 namespace Identity.Domain.Entities.Exceptions.Models;
 
-public class InvalidLanguageException : BusinessFlowException
+public class TokenGenerationException : BusinessFlowException
 {
-    public override short Code => (short)IdentityExceptions.InvalidLanguageException;
+    public override short Code => (short)IdentityExceptions.TokenGenerationException;
 
-    public InvalidLanguageException()
+    public TokenGenerationException()
     {
     }
 
-    public InvalidLanguageException(string message) : base(message)
+    public TokenGenerationException(string message) : base(message)
     {
     }
 
-    public InvalidLanguageException(string message, Exception innerException) : base(message, innerException)
+    public TokenGenerationException(string message, Exception innerException) : base(message, innerException)
     {
     }
 }

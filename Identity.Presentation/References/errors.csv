@@ -34,6 +34,12 @@
 -10010|en|400|Password is not valid.
 -10010|uz|400|Parol yaroqsiz.
 -10010|ru|400|Пароль недействителен.
--10011|en|400|User is not found.
--10011|uz|400|Foydalanuvchi topilmadi.
--10011|ru|400|Пользователь не найден.
+-10011|en|404|User is not found.
+-10011|uz|404|Foydalanuvchi topilmadi.
+-10011|ru|404|Пользователь не найден.
+-10012|en|400|User session has expired, try again.
+-10012|uz|400|Foydalanuvchi seansi muddati tugadi, qayta urinib koʻring.
+-10012|ru|400|Срок действия сеанса пользователя истек, попробуйте еще раз.
+-10013|en|400|Failed to generate a token for a user.
+-10013|uz|400|Foydalanuvchi uchun token yaratib bo‘lmadi.
+-10013|ru|400|Не удалось создать токен для пользователя.

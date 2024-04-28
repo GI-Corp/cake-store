@@ -2,28 +2,12 @@
 
 namespace Identity.Application.Dto.Auth;
 
-public class RegisterDto
+public class LoginDto
 {
     [Required]
     [MaxLength(30)]
-    public virtual string UserName { get; set; }
+    public string UserName { get; set; }
 
     [Required]
     public string Password { get; set; }
-
-    [Required] 
-    [MaxLength(3)] 
-    public string LanguageId { get; set; }
-    
-    [Required] 
-    [MaxLength(30)] 
-    public string FirstName { get; set; }
-    
-    [Required] 
-    [MaxLength(30)] 
-    public string LastName { get; set; }
-
-    [Required] 
-    [MaxLength(25)] 
-    public string Role { get; set; } = "Customer";
 }

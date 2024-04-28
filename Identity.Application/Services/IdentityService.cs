@@ -1,14 +1,27 @@
 ﻿using System.Security.Claims;
+using System.Security.Cryptography;
 using AutoMapper;
 using Identity.Application.Dto.Auth;
 using Identity.Application.Dto.Identity;
+using Identity.Application.Extensions;
 using Identity.Application.Helpers;
 using Identity.Application.Interfaces;
 using Identity.Domain.Abstractions.Interfaces;
+using Identity.Domain.Constants;
 using Identity.Domain.Entities.Auth;
 using Identity.Domain.Entities.Exceptions.Models;
+using Identity.Domain.Entities.Session;
+using Identity.Domain.Entities.Token;
+using Identity.Infrastructure.DAL.DbContexts;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.JsonWebTokens;
+using Newtonsoft.Json;
+using Shared.Common.Authorization.JWT;
+using Shared.Common.Authorization.JWT.Interfaces;
+using Shared.Common.Helpers;
 using Shared.Common.Logging.Interfaces;
+using Shared.Data.Abstraction;
 
 namespace Identity.Application.Services;
 
@@ -16,21 +29,25 @@ public class IdentityService : IIdentityService
 {
     private readonly IEventLoggerService<IdentityService> _logger;
     private readonly IIdentityRepository _identityRepository;
+    private IRepository<UserSession, Guid, IdentityContext> _sessionRepository;
     private readonly RoleManager<AppRole> _roleManager;
     private readonly UserManager<AppUser> _userManager;
-    private readonly IPasswordHasher<AppUser> _hasher;
+    private readonly IJwtFactory _jwtFactory;
+    private readonly JwtIssuerOptions _jwtOptions;
     private readonly IMapper _mapper;
     
     public IdentityService(IEventLoggerService<IdentityService> logger, IIdentityRepository identityRepository,
-        RoleManager<AppRole> roleManager, UserManager<AppUser> userManager, IPasswordHasher<AppUser> passwordHasher,
-        IMapper mapper)
+        RoleManager<AppRole> roleManager, UserManager<AppUser> userManager, IJwtFactory jwtFactory, IOptions<JwtIssuerOptions> jwtOptions,
+        IMapper mapper, IRepository<UserSession, Guid, IdentityContext> sessionRepository)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _identityRepository = identityRepository ?? throw new ArgumentNullException(nameof(identityRepository));
         _roleManager = roleManager ?? throw new ArgumentNullException(nameof(roleManager));
         _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
-        _hasher = passwordHasher ?? throw new ArgumentNullException(nameof(passwordHasher));
+        _jwtFactory = jwtFactory ?? throw new ArgumentNullException(nameof(jwtFactory));
+        _jwtOptions = jwtOptions.Value ?? throw new ArgumentNullException(nameof(jwtOptions));
         _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+        _sessionRepository = sessionRepository ?? throw new ArgumentNullException(nameof(sessionRepository));
     }
     
     public async Task<AppUserDto> CreateOrUpdateUserAsync(RegisterDto registerDto)
@@ -75,6 +92,147 @@ public class IdentityService : IIdentityService
             throw new UserNotFoundException();
 
         return _mapper.Map<AppUserDto>(user);
+    }
+
+    public async Task<TokenDto> AuthorizeUserAsync(LoginDto loginDto, string? hostAddress)
+    {
+        var user = await _identityRepository.FindByNameAsync(loginDto.UserName, includeReferences: true);
+
+        if (user == null)
+            throw new UserNotFoundException();
+
+        var isPasswordValid = await _identityRepository.ValidateUserPasswordAsync(user.Id, password: loginDto.Password);
+
+        if (!isPasswordValid)
+            throw new PasswordNotValidException();
+
+        var userSession = await CreateOrGetUserSessionAsync(user, hostAddress);
+
+        var identityClaims = await GetClaimsIdentity(user, sessionId: userSession.Id);
+
+        var jwtToken = await GenerateJwtTokenAsync(user, identityClaims, userSession);
+
+        if (jwtToken == null)
+            throw new TokenGenerationException();
+        
+        return new TokenDto
+        {
+            SessionId = userSession.Id,
+            Token = jwtToken
+        };
+    }
+
+    private async Task<JwtToken> GenerateJwtTokenAsync(AppUser appUser, ClaimsIdentity identityClaims, UserSession session)
+    {
+        var jwtToken = await TokenGeneratorExtension.GenerateJwtToken(
+            identityClaims,
+            _jwtFactory,
+            appUser.UserName!,
+            _jwtOptions,
+            new JsonSerializerSettings { Formatting = Formatting.Indented });
+
+        appUser.LastSignedInOn = DateTime.Now;
+        jwtToken.RefreshToken = await GenerateRefreshTokenAsync();
+        
+        var refreshToken = GetRefreshToken(jwtToken.RefreshToken, appUser.Id, session.Id);
+        bool deactivated = await DeactivateOldRefreshTokensAsync(session);
+        
+        if (deactivated)
+            _logger.LogInformation($"Refresh tokens for session {session.Id} are deactivated.");
+        
+        await _identityRepository.CreateRefreshTokenAsync(refreshToken);
+        await _identityRepository.UpdateUserAsync(appUser);
+        
+        // TODO: Send email notification to user about login
+        return jwtToken;
+    }
+
+    private async Task<bool> DeactivateOldRefreshTokensAsync(UserSession userSession)
+    {
+        var refreshTokens = await _identityRepository.GetRefreshTokensBySessionIdAsync(userSession);
+
+        await Task.WhenAll(refreshTokens.Select(async token =>
+        {
+            token.IsActive = false;
+            token.DeletedAt = DateTime.Now;
+
+            await _identityRepository.UpdateRefreshTokenAsync(token);
+        }));
+
+        return true;
+    }
+    private static Task<string> GenerateRefreshTokenAsync()
+    {
+        using var rngCryptoServiceProvider = new RNGCryptoServiceProvider();
+            var randomBytes = new byte[64];
+            rngCryptoServiceProvider.GetBytes(randomBytes);
+            return Task.FromResult(Convert.ToBase64String(randomBytes));
+    }
+    
+    private static RefreshToken GetRefreshToken(string token, Guid userId, Guid sessionId)
+    {
+        return new RefreshToken
+        {
+            Id = Guid.NewGuid(),
+            Token = token,
+            UserId = userId,
+            SessionId = sessionId,
+            IsActive = true,
+            ExpiresAt = DateTime.Now.AddDays(10),
+            CreatedAt = DateTime.Now
+        };
+    }
+
+    private async Task<UserSession> CreateOrGetUserSessionAsync(AppUser appUser, string? hostAddress)
+    {
+        var userSession = await _identityRepository.FindUserSessionByIdAsync(appUser.Id, hostAddress);
+
+        if (userSession == null)
+        {
+            var session = new UserSession
+            {
+                Id = Guid.NewGuid(),
+                UserId = appUser.Id,
+                HostAddress = hostAddress,
+                StatusId = (int)SessionStatusTypes.Active,
+                IsActive = true,
+                CreatedAt = DateTime.Now
+            };
+
+            await _sessionRepository.CreateAsync(session);
+            return session;
+        }
+
+        if (userSession.StatusId != (int)SessionStatusTypes.Active)
+        {
+            // TODO: Handle with oAuth2.0 bu verification code
+            _logger.LogWarning($"User session {userSession.Id} has expired, needs to be activated.");
+            
+            await _identityRepository.DeleteSessionAsync(userSession);
+            throw new SessionIsExpiredException();
+        }
+
+        return userSession;
+    }
+    
+    private async Task<ClaimsIdentity> GetClaimsIdentity(AppUser user, Guid sessionId)
+    {
+        var userClaims = await _userManager.GetClaimsAsync(user);
+        var roles = await _userManager.GetRolesAsync(user);
+
+        var claims = new Claim[]
+            {
+                new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new(Constants.JwtClaimIdentifiers.Id, user.Id.ToString()),
+                new(Constants.JwtClaimIdentifiers.PhoneNumber, user.PhoneNumber!),
+                new(Constants.JwtClaimIdentifiers.UserName, user.UserName!),
+                new(Constants.JwtClaimIdentifiers.LanguageId, user.UserSetting.LanguageId),
+                new(Constants.JwtClaimIdentifiers.SessionId, sessionId.ToString())
+            }
+            .Union(userClaims)
+            .Union(roles.Select(w => new Claim(ClaimTypes.Role, w)));
+
+        return _jwtFactory.GenerateClaimsIdentity(user.UserName!, claims); 
     }
 
     private async Task<AppUserDto?> CreateUserAsync(RegisterDto registerDto)

@@ -14,5 +14,7 @@ public enum IdentityExceptions : short
     InvalidLanguageException = -10008,
     PhoneNotValidException = -10009,
     PasswordNotValidException = -10010,
-    UserNotFoundException = -10011
+    UserNotFoundException = -10011,
+    SessionIsExpiredException = -10012,
+    TokenGenerationException = -10013,
 }

@@ -1,4 +1,4 @@
-namespace Identity.Domain.Entities.Auth;
+namespace Identity.Domain.Entities.Token;
 
 public class JwtToken
 {

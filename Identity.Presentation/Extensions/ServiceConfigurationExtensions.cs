@@ -153,6 +153,13 @@ public static class ServiceConfigurationExtensions
         var secretKey = jwtOptions[nameof(JwtIssuerOptions.SecretKey)];
         var signingKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(secretKey!));
 
+        serviceCollection.Configure<JwtIssuerOptions>(options =>
+        {
+            options.Issuer = jwtOptions[nameof(JwtIssuerOptions.Issuer)]!;
+            options.Audience = jwtOptions[nameof(JwtIssuerOptions.Audience)]!;
+            options.SigningCredentials = new SigningCredentials(signingKey, SecurityAlgorithms.HmacSha256);
+        });
+        
         JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
         var tokenValidationParameters = new TokenValidationParameters

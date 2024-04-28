@@ -1,8 +1,8 @@
 ﻿namespace Identity.Domain.Constants;
 
-public enum BehaviorTypes
+public enum SessionStatusTypes
 {
-    Disabled = 0,
-    Enabled = 1,
-    Mobile = 2
+    Inactive = 0,
+    Active = 1,
+    Blocked = 2
 }

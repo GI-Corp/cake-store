@@ -29,6 +29,7 @@ public class IdentityInitializer
 
     private async Task SeedFixturesAsync()
     {
+        Console.WriteLine("Seeding identity fixtures...");
         IdentityResult identityResult;
 
         // adding admin role to database
@@ -70,6 +71,7 @@ public class IdentityInitializer
         }
 
         await SeedMockUsersAsync();
+        Console.WriteLine("Seeding identity fixtures is completed.");
     }
 
     private async Task SeedMockUsersAsync()
@@ -90,6 +92,7 @@ public class IdentityInitializer
     
     private async Task SeedErrorsAsync()
     {
+        Console.WriteLine("Seeding identity errors...");
         var fileName = Path.Combine(Directory.GetCurrentDirectory(), "References", "errors.csv");
         var errors = await File.ReadAllLinesAsync(fileName);
         var entities = errors.Select(w =>
@@ -123,6 +126,7 @@ public class IdentityInitializer
                 throw new InvalidOperationException("Cannot seed available errors.");
             }
         }
+        Console.WriteLine("Seeding identity errors is completed.");
     }
 
     private async Task<AppUser?> CreateUserAsync(string userName, string userType)
