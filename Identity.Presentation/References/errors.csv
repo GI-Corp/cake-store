@@ -34,3 +34,6 @@
 -10010|en|400|Password is not valid.
 -10010|uz|400|Parol yaroqsiz.
 -10010|ru|400|Пароль недействителен.
+-10011|en|400|User is not found.
+-10011|uz|400|Foydalanuvchi topilmadi.
+-10011|ru|400|Пользователь не найден.

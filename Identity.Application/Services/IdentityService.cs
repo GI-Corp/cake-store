@@ -67,6 +67,16 @@ public class IdentityService : IIdentityService
         return true;
     }
 
+    public async Task<AppUserDto> GetUserDetailsByIdAsync(Guid userId)
+    {
+        var user = await _identityRepository.FindByIdAsync(userId, includeReferences: true);
+
+        if (user == null)
+            throw new UserNotFoundException();
+
+        return _mapper.Map<AppUserDto>(user);
+    }
+
     private async Task<AppUserDto?> CreateUserAsync(RegisterDto registerDto)
     {
         var appUser = new AppUser

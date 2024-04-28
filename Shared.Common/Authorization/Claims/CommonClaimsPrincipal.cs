@@ -14,7 +14,7 @@ public class CommonClaimsPrincipal : ClaimsPrincipal
 
     private string GetClaimValue(string claimType) => _claimsIdentity?.FindFirst(claimType)?.Value!;
 
-    public Guid? UserId => TryParseGuid(GetClaimValue(Helpers.Constants.JwtClaimIdentifiers.Id));
+    public Guid UserId => (Guid)TryParseGuid(GetClaimValue(Helpers.Constants.JwtClaimIdentifiers.Id));
     public string LanguageId => GetClaimValue(Helpers.Constants.JwtClaimIdentifiers.LanguageId);
     public string UserName => GetClaimValue(Helpers.Constants.JwtClaimIdentifiers.UserName);
     public string PhoneNumber => GetClaimValue(Helpers.Constants.JwtClaimIdentifiers.PhoneNumber);

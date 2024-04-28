@@ -13,5 +13,6 @@ public enum IdentityExceptions : short
     SettingCreationException = -10007,
     InvalidLanguageException = -10008,
     PhoneNotValidException = -10009,
-    PasswordNotValidException = -10010
+    PasswordNotValidException = -10010,
+    UserNotFoundException = -10011
 }
