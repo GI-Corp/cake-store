@@ -7,14 +7,14 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Identity.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialIdentityMigration : Migration
+    public partial class IdentityInitialMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.EnsureSchema(
                 name: "Identity");
-
+            
             migrationBuilder.EnsureSchema(
                 name: "References");
 
@@ -60,7 +60,7 @@ namespace Identity.Infrastructure.Migrations
                 {
                     table.PrimaryKey("PK_AppUsers", x => x.Id);
                 });
-
+            
             migrationBuilder.CreateTable(
                 name: "AppRoleClaims",
                 schema: "Identity",
@@ -212,8 +212,7 @@ namespace Identity.Infrastructure.Migrations
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     UserId = table.Column<Guid>(type: "uuid", nullable: false),
-                    AppUserId = table.Column<Guid>(type: "uuid", nullable: false),
-                    HostAddress = table.Column<string>(type: "text", nullable: true),
+                    HostAddress = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: true),
                     StatusId = table.Column<short>(type: "smallint", nullable: false),
                     IsActive = table.Column<bool>(type: "boolean", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
@@ -224,8 +223,8 @@ namespace Identity.Infrastructure.Migrations
                 {
                     table.PrimaryKey("PK_UserSessions", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_UserSessions_AppUsers_AppUserId",
-                        column: x => x.AppUserId,
+                        name: "FK_UserSessions_AppUsers_UserId",
+                        column: x => x.UserId,
                         principalSchema: "Identity",
                         principalTable: "AppUsers",
                         principalColumn: "Id",
@@ -295,9 +294,7 @@ namespace Identity.Infrastructure.Migrations
                     Token = table.Column<string>(type: "text", nullable: false),
                     ExpiresAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     UserId = table.Column<Guid>(type: "uuid", nullable: false),
-                    AppUserId = table.Column<Guid>(type: "uuid", nullable: false),
                     SessionId = table.Column<Guid>(type: "uuid", nullable: false),
-                    UserSessionId = table.Column<Guid>(type: "uuid", nullable: false),
                     IsActive = table.Column<bool>(type: "boolean", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
@@ -307,15 +304,15 @@ namespace Identity.Infrastructure.Migrations
                 {
                     table.PrimaryKey("PK_RefreshTokens", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_RefreshTokens_AppUsers_AppUserId",
-                        column: x => x.AppUserId,
+                        name: "FK_RefreshTokens_AppUsers_UserId",
+                        column: x => x.UserId,
                         principalSchema: "Identity",
                         principalTable: "AppUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_RefreshTokens_UserSessions_UserSessionId",
-                        column: x => x.UserSessionId,
+                        name: "FK_RefreshTokens_UserSessions_SessionId",
+                        column: x => x.SessionId,
                         principalSchema: "Identity",
                         principalTable: "UserSessions",
                         principalColumn: "Id",
@@ -394,16 +391,22 @@ namespace Identity.Infrastructure.Migrations
                 column: "LanguageId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_RefreshTokens_AppUserId",
+                name: "IX_RefreshTokens_Id_UserId_SessionId",
                 schema: "Identity",
                 table: "RefreshTokens",
-                column: "AppUserId");
+                columns: new[] { "Id", "UserId", "SessionId" });
 
             migrationBuilder.CreateIndex(
-                name: "IX_RefreshTokens_UserSessionId",
+                name: "IX_RefreshTokens_SessionId",
                 schema: "Identity",
                 table: "RefreshTokens",
-                column: "UserSessionId");
+                column: "SessionId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RefreshTokens_UserId",
+                schema: "Identity",
+                table: "RefreshTokens",
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_UserProfiles_Id_UserId",
@@ -419,10 +422,16 @@ namespace Identity.Infrastructure.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_UserSessions_AppUserId",
+                name: "IX_UserSessions_Id_UserId",
                 schema: "Identity",
                 table: "UserSessions",
-                column: "AppUserId");
+                columns: new[] { "Id", "UserId" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserSessions_UserId",
+                schema: "Identity",
+                table: "UserSessions",
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_UserSettings_Id_UserId",

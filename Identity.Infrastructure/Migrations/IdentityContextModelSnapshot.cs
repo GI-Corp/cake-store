@@ -262,9 +262,6 @@ namespace Identity.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("AppUserId")
-                        .HasColumnType("uuid");
-
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp without time zone");
 
@@ -272,7 +269,8 @@ namespace Identity.Infrastructure.Migrations
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("HostAddress")
-                        .HasColumnType("text");
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("boolean");
@@ -288,7 +286,9 @@ namespace Identity.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AppUserId");
+                    b.HasIndex("UserId");
+
+                    b.HasIndex("Id", "UserId");
 
                     b.ToTable("UserSessions", "Identity");
                 });
@@ -297,9 +297,6 @@ namespace Identity.Infrastructure.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("AppUserId")
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedAt")
@@ -327,14 +324,13 @@ namespace Identity.Infrastructure.Migrations
                     b.Property<Guid>("UserId")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("UserSessionId")
-                        .HasColumnType("uuid");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("AppUserId");
+                    b.HasIndex("SessionId");
 
-                    b.HasIndex("UserSessionId");
+                    b.HasIndex("UserId");
+
+                    b.HasIndex("Id", "UserId", "SessionId");
 
                     b.ToTable("RefreshTokens", "Identity");
                 });
@@ -496,8 +492,8 @@ namespace Identity.Infrastructure.Migrations
             modelBuilder.Entity("Identity.Domain.Entities.Session.UserSession", b =>
                 {
                     b.HasOne("Identity.Domain.Entities.Auth.AppUser", "AppUser")
-                        .WithMany()
-                        .HasForeignKey("AppUserId")
+                        .WithMany("UserSessions")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -506,15 +502,15 @@ namespace Identity.Infrastructure.Migrations
 
             modelBuilder.Entity("Identity.Domain.Entities.Token.RefreshToken", b =>
                 {
-                    b.HasOne("Identity.Domain.Entities.Auth.AppUser", "AppUser")
+                    b.HasOne("Identity.Domain.Entities.Session.UserSession", "UserSession")
                         .WithMany()
-                        .HasForeignKey("AppUserId")
+                        .HasForeignKey("SessionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Identity.Domain.Entities.Session.UserSession", "UserSession")
+                    b.HasOne("Identity.Domain.Entities.Auth.AppUser", "AppUser")
                         .WithMany()
-                        .HasForeignKey("UserSessionId")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -578,6 +574,8 @@ namespace Identity.Infrastructure.Migrations
                 {
                     b.Navigation("UserProfile")
                         .IsRequired();
+
+                    b.Navigation("UserSessions");
 
                     b.Navigation("UserSetting")
                         .IsRequired();
