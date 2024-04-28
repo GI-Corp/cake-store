@@ -43,5 +43,8 @@ public class IdentityContext : IdentityDbContext<AppUser, AppRole, Guid>
         builder.ApplyConfiguration(new IdentityUserLoginEntityTypeConfiguration());
         builder.ApplyConfiguration(new IdentityUserRoleEntityTypeConfiguration());
         builder.ApplyConfiguration(new IdentityUserTokenEntityTypeConfiguration());
+        builder.ApplyConfiguration(new UserSessionEntityTypeConfiguration());
+        builder.ApplyConfiguration(new RefreshTokenEntityTypeConfiguration());
+
     }
 }
