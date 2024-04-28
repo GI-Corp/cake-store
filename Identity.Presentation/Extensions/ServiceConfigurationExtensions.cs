@@ -2,8 +2,10 @@
 using System.Text;
 using Identity.Application.Interfaces;
 using Identity.Application.Services;
+using Identity.Domain.Abstractions.Interfaces;
 using Identity.Domain.Entities.Auth;
 using Identity.Infrastructure.DAL.DbContexts;
+using Identity.Infrastructure.DAL.Repositories;
 using Identity.Presentation.Helpers;
 using Identity.Presentation.Mappers.Reference;
 using Identity.Presentation.Middlewares;
@@ -103,15 +105,19 @@ public static class ServiceConfigurationExtensions
             .AddTransient<IdentityInitializer>()
             .AddTransient<ReferenceContainerInitializer>()
             
+            .AddScoped<IIdentityRepository, IdentityRepository>()
+            .AddScoped<IIdentityService, IdentityService>()
+            
             .AddSingleton<IReferenceContainer, ReferenceContainer>()
             .AddSingleton<IHttpContextAccessor, HttpContextAccessor>()
             .AddSingleton<IEncryptionService, EncryptionService>()
 
             .AddExternalApis()
-            .AddCakeStoreAdapters()
+            .AddIdentityAdapters()
             
             .AddSingleton<IErrorService, ErrorService>()
-    
+            .AddTransient<IdentityExceptionHandlerMiddleware>()
+            
             .AddSingleton<JsonSerializerSettings>(cfg => new JsonSerializerSettings
             {
                 Formatting = Formatting.Indented,
@@ -192,7 +198,9 @@ public static class ServiceConfigurationExtensions
                 .RequireAuthenticatedUser()
                 .Build();
 
-            options.AddPolicy("AdminUserPolicy", policy => policy.RequireRole("Admin"));
+            options.AddPolicy("AdminUserPolicy", policy => 
+                policy.RequireRole("Admin"));
+            
             options.AddPolicy("CustomerPolicy", policy =>
             {
                 policy.RequireRole("Customer");
@@ -260,7 +268,7 @@ public static class ServiceConfigurationExtensions
         return serviceCollection;
     }
     
-    private static IServiceCollection AddCakeStoreAdapters(this IServiceCollection serviceCollection)
+    private static IServiceCollection AddIdentityAdapters(this IServiceCollection serviceCollection)
     {
         return serviceCollection;
     }

@@ -1,7 +1,6 @@
 ﻿using Identity.Application.Dto.Auth;
 using Identity.Application.Dto.Identity;
 using Identity.Application.Interfaces;
-using Identity.Domain.Entities.Exceptions.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Shared.Common.Controllers;
