@@ -15,6 +15,9 @@ public class ReferenceContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        
+        base.OnModelCreating(modelBuilder);
+        modelBuilder.HasDefaultSchema(ReferenceScheme);
+        modelBuilder.Entity<Language>().ToTable(nameof(Languages)).HasKey(w => new { w.Id });
+
     }
 }
