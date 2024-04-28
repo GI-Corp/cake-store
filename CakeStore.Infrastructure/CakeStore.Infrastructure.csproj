@@ -8,7 +8,6 @@
 
     <ItemGroup>
       <Folder Include="DAL\Repositories\" />
-      <Folder Include="EntityConfigurations\" />
     </ItemGroup>
 
     <ItemGroup>

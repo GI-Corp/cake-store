@@ -10,6 +10,7 @@ public class Image : IBaseEntity<Guid>
     public Guid? CakeId { get; set; }
     public Cake.Cake Cake { get; set; }
     public bool IsActive { get; set; }
+    public int Ordering { get; set; } = 0;
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
     public DateTime? DeletedAt { get; set; }

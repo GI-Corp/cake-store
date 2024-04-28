@@ -20,7 +20,6 @@ public class IdentityContext : DbContext
     {
         base.OnModelCreating(modelBuilder);
         modelBuilder.HasDefaultSchema(IdentityScheme);
-
         modelBuilder.Entity<AppUser>().ToTable(nameof(AppUsers)).HasKey(w => new { w.Id });
         modelBuilder.Entity<UserSession>().ToTable(nameof(UserSessions)).HasKey(w => new { w.Id });
         modelBuilder.Entity<UserProfile>().ToTable(nameof(UserProfiles)).HasKey(w => new { w.Id });
