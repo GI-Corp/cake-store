@@ -45,4 +45,13 @@ public static class Constants
         public const string ru = "ru";
         public const string en = "en";
     }
+    
+    public static class AppUserType
+    {
+        public const string Admin = "Admin";
+        public const string Customer = "Customer";
+        public const string Seller = "Seller";
+
+        public static readonly List<string> AppUserTypes = new() { Admin, Customer, Seller};
+    }
 }
