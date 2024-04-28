@@ -12,5 +12,8 @@ public class AppUserProfile : Profile
             .ForMember(d => d.UserProfile, opt => opt.MapFrom(s => s.UserProfile))
             .ForMember(d => d.UserSetting, opt => opt.MapFrom(s => s.UserSetting))
             .ReverseMap();
+
+        CreateMap<UserProfileDto, UserProfile>().ReverseMap();
+        CreateMap<UserSettingDto, UserSetting>().ReverseMap();
     }
 }
