@@ -1,0 +1,16 @@
+FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
+WORKDIR /source
+
+ARG prj=Identity.Presentation.csproj
+ARG path=Identity/Presentation/Identity.Presentation
+
+COPY NuGet.Config /
+COPY ${path}/${prj} ./${path}/
+RUN dotnet restore ${path}/${prj}
+COPY . .
+RUN dotnet publish ${path}/${prj} -c Release -o /app/publish
+
+FROM mcr.microsoft.com/dotnet/aspnet:7.0
+WORKDIR /app
+COPY --from=build /app/publish .
+ENTRYPOINT ["dotnet", "Identity.Presentation.dll"]

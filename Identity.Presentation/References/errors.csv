@@ -1,0 +1,45 @@
+﻿0|en|400|Unkown error is occured.
+0|uz|400|Произошла неизвестная ошибка.
+0|ru|400|Noma'lum xatolik yuz berdi.
+-10000|en|500|Internal server error.
+-10000|uz|500|Serverdagi ichki xatolik.
+-10000|ru|500|Внутренняя ошибка сервера.
+-10001|en|400|Username is not valid.
+-10001|uz|400|Foydalanuvchi nomi yaroqsiz.
+-10001|ru|400|Имя пользователя недействительно.
+-10002|en|400|An error is occured while creating the user.
+-10002|uz|400|Foydalanuvchini yaratishda xatolik yuz berdi.
+-10002|ru|400|Произошла ошибка при создании пользователя.
+-10003|en|400|Invalid registration data, try again.
+-10003|uz|400|Ro‘yxatdan o‘tish ma’lumotlari noto‘g‘ri, qayta urinib ko‘ring. 
+-10003|ru|400|Неверные регистрационные данные, попробуйте еще раз.
+-10004|en|400|User is already exists.
+-10004|uz|400|Foydalanuvchi allaqachon mavjud.
+-10004|ru|400|Пользователь уже существует.
+-10005|en|400|Invalid role is specified.
+-10005|uz|400|Yaroqsiz rol belgilangan..
+-10005|ru|400|Указана неверная роль.
+-10006|en|400|An error is occured while creating the user profile.
+-10006|uz|400|Foydalanuvchini profili yaratishda xatolik yuz berdi.
+-10006|ru|400|Произошла ошибка при создании пользовательского профиля.
+-10007|en|400|An error is occured while creating the user settings.
+-10007|uz|400|Foydalanuvchi sozlamalarini yaratishda xatolik yuz berdi.
+-10007|ru|400|Возникла ошибка при создании пользовательских настроек.
+-10008|en|404|User has not been verified yet. Please acivate your account.
+-10008|uz|404|Foydalanuvchi tasdiqlanmadi. Iltimos accountizni faollashtiring.
+-10008|ru|404|Пользователь не подтвержден. Пожалуйста, активируйте свой аккаунт.
+-10009|en|400|Phone number is not valid.
+-10009|uz|400|Telefon raqami yaroqsiz.
+-10009|ru|400|Номер телефона недействителен.
+-10010|en|400|Password is not valid.
+-10010|uz|400|Parol yaroqsiz.
+-10010|ru|400|Пароль недействителен.
+-10011|en|404|User is not found.
+-10011|uz|404|Foydalanuvchi topilmadi.
+-10011|ru|404|Пользователь не найден.
+-10012|en|400|User session has expired, try again.
+-10012|uz|400|Foydalanuvchi seansi muddati tugadi, qayta urinib koʻring.
+-10012|ru|400|Срок действия сеанса пользователя истек, попробуйте еще раз.
+-10013|en|400|Failed to generate a token for a user.
+-10013|uz|400|Foydalanuvchi uchun token yaratib bo‘lmadi.
+-10013|ru|400|Не удалось создать токен для пользователя.

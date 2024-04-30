@@ -1,0 +1,18 @@
+﻿{
+  "profiles": {
+    "Identity.Presentation.Testing": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Testing"
+      },
+      "applicationUrl": "http://localhost:8010"
+    },
+    "Identity.Presentation.Local": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Local"
+      },
+      "applicationUrl": "http://localhost:8010"
+    }
+  }
+}
